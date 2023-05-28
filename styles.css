@@ -14,7 +14,7 @@ body {
     min-height: 100vh;
   }
 
-  .comments,
+  #comments,
   .comment {
     margin: 0;
     padding: 0;
@@ -34,7 +34,7 @@ body {
     border-radius: 20px;
   }
 
-  .comments {
+  #comments {
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -98,20 +98,20 @@ body {
     flex-direction: column;
   }
 
-  .add-form-name,
-  .add-form-text {
+  #add-form-name,
+  #add-form-comment {
     font-size: 16px;
     font-family: Helvetica;
     border-radius: 8px;
     border: none;
   }
 
-  .add-form-name {
+  #add-form-name {
     width: 300px;
     padding: 11px 22px;
   }
 
-  .add-form-text {
+  #add-form-comment {
     margin-top: 12px;
     padding: 22px;
     resize: none;
@@ -122,7 +122,7 @@ body {
     justify-content: flex-end;
   }
 
-  .add-form-button {
+  #add-form-button {
     margin-top: 24px;
     font-size: 24px;
     padding: 10px 20px;
@@ -132,6 +132,6 @@ body {
     cursor: pointer;
   }
 
-  .add-form-button:hover {
+  #add-form-button:hover {
     opacity: 0.9;
   }

@@ -8,7 +8,7 @@
 
   <body>
     <div class="container">
-      <ul class="comments">
+      <ul id="comments">
         <li class="comment">
           <div class="comment-header">
             <div>Глеб Фокин</div>
@@ -26,38 +26,38 @@
             </div>
           </div>
         </li>
-        <li class="comment">
-          <div class="comment-header">
-            <div>Варвара Н.</div>
-            <div>13.02.22 19:22</div>
+      <li class="comment">
+        <div class="comment-header">
+          <div>Варвара Н.</div>
+          <div>13.02.22 19:22</div>
+        </div>
+        <div class="comment-body">
+          <div class="comment-text">
+            Мне нравится как оформлена эта страница! ❤
           </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              Мне нравится как оформлена эта страница! ❤
-            </div>
+        </div>
+        <div class="comment-footer">
+          <div class="likes">
+            <span class="likes-counter">75</span>
+            <button class="like-button -active-like"></button>
           </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter">75</span>
-              <button class="like-button -active-like"></button>
-            </div>
-          </div>
-        </li>
-      </ul>
+        </div>
+      </li>
+    </ul>
       <div class="add-form">
         <input
           type="text"
-          class="add-form-name"
+          id="add-form-name"
           placeholder="Введите ваше имя"
         />
         <textarea
           type="textarea"
-          class="add-form-text"
+          id="add-form-comment"
           placeholder="Введите ваш коментарий"
           rows="4"
         ></textarea>
         <div class="add-form-row">
-          <button class="add-form-button">Написать</button>
+          <button id="add-form-button">Написать</button>
         </div>
       </div>
     </div>
@@ -66,6 +66,39 @@
   <script>
     "use strict";
     // Код писать здесь
-    console.log("It works!");
+    const buttonElement = document.getElementById("add-form-button");
+    const commentsElement = document.getElementById("comments");
+    const dateElement = new Date(),
+          year = dateElement.getFullYear(),
+          month = dateElement.getMonth(),
+          day = dateElement.getDate(),
+          hours = dateElement.getHours(),
+          minutes = dateElement.getMinutes();
+
+    buttonElement.addEventListener('click', () => {
+      let commentForm = document.getElementById('add-form-comment').value;
+      let nameForm = document.getElementById('add-form-name').value;
+      let newComment = `<li class="comment">
+                          <div class="comment-header">
+                              <div>${nameForm}</div>
+                              <div>${day + '.' + month + '.' + year + ' ' + hours + ':' + minutes}</div>
+                            </div>
+                            <div class="comment-body">
+                              <div class="comment-text">
+                                ${commentForm}
+                              </div>
+                            </div>
+                            <div class="comment-footer">
+                              <div class="likes">
+                                <span class="likes-counter">0</span>
+                                <button class="like-button"></button>
+                              </div>
+                            </div>
+                          </li>`
+      const oldCommentsHtml = commentsElement.innerHTML;
+      if (nameForm != '' && commentForm != '') {
+        commentsElement.innerHTML = oldCommentsHtml + newComment;
+      }
+    })
   </script>
 </html>
