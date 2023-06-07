@@ -46,6 +46,9 @@
         </div>
       </li>
     </ul>
+
+    <p class="loading" style="text-align: center; color: white;">Комментарии загружаются</p>
+
     <div class="add-form">
       <input type="text" class="add-form-name" placeholder="Введите ваше имя" required />
       <textarea type="textarea" class="add-form-text" placeholder="Введите ваш комментарий" rows="4"
@@ -57,6 +60,7 @@
   </div>
 </body>
 <script>
+  const loading = document.querySelector('.loading');
   const commentList = document.querySelector('.comments');
   const addForm = document.querySelector('.add-form');
   const userName = document.querySelector('.add-form-name');
@@ -95,13 +99,12 @@
   };
 
   
-  const fetchPromise = fetch('https://webdev-hw-api.vercel.app/api/v1/islam-kyalbiev/comments', {
+  fetch('https://webdev-hw-api.vercel.app/api/v1/islam-kyalbiev/comments', {
     method: 'GET',
-  });
-  fetchPromise.then((response) => {
+  })
+    .then((response) => response.json())
     
-    const jsonPromise = response.json();
-    jsonPromise.then((responseData) => {
+    .then((responseData) => {
       appComments = responseData.comments.map((comment) => {
         return {
           name: comment.author.name,
@@ -109,11 +112,13 @@
           text: comment.text,
           like: comment.likes,
           Iliked: false,
-        }
-      })
-      comments = appComments;
-      renderComments();
-    });
+    }
+  })
+
+    comments = appComments;
+    renderComments();
+
+    loading.style.display = 'none';
   });
 
   function renderComments() {
@@ -155,17 +160,35 @@
     addCommentListener();
   }
 
-  const sendCommentToServer = (comment) => {
+    const sendCommentToServer = (comment) => {
+
+    if (addForm) {
+      addForm.style.display = 'none';
+      loading.style.display = 'block';
+    }
+
     fetch('https://webdev-hw-api.vercel.app/api/v1/islam-kyalbiev/comments', {
       method: 'POST',
       body: JSON.stringify(comment),
     })
-      .then((response) => response.json())
-      .then((responseData) => {
+    .then((response) => {
+        if (!response.ok) {
+          throw new Error("Ошибка сервера: " + response.status);
+        }
+        return response.json();
+      })
+    .then((responseData) => {
+      if (addForm) {
+          addForm.style.display = 'block';
+          loading.style.display = 'none';
+        }
         console.log('Комментарий успешно отправлен на сервер:', responseData);
       })
       .catch((error) => {
         console.error('Ошибка при отправке комментария на сервер:', error);
+        if (comment.name.length < 3 || comment.text.length < 3) {
+          alert("Введите не менее 3 символов");
+        }
       });
   };
 
@@ -219,7 +242,12 @@
       }
     }
 
-    return isUserNameValid && isTextCommentValid;
+    if (!isUserNameValid || !isTextCommentValid) {
+      alert("Введите не менее 3 символов");
+      return false; 
+    }
+
+    return true;
   };
 
   button.addEventListener('click', (event) => {
