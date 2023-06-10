@@ -167,13 +167,19 @@
       loading.style.display = 'block';
     }
 
+    const userNameValue = userName.value;
+    const textCommentValue = textComment.value;
+
     fetch('https://webdev-hw-api.vercel.app/api/v1/islam-kyalbiev/comments', {
       method: 'POST',
       body: JSON.stringify(comment),
     })
     .then((response) => {
         if (!response.ok) {
-          throw new Error("Ошибка сервера: " + response.status);
+          if (response.status === 500) {
+            throw new Error('Server Error');
+          }
+            throw new Error("Ошибка сервера: " + response.status);
         }
         return response.json();
       })
@@ -183,12 +189,26 @@
           loading.style.display = 'none';
         }
         console.log('Комментарий успешно отправлен на сервер:', responseData);
+        appComments.push(comment);
+        renderComments(); 
+        textComment.value = '';
+        userName.value = '';
+        button.setAttribute('disabled', '');
       })
       .catch((error) => {
         console.error('Ошибка при отправке комментария на сервер:', error);
         if (comment.name.length < 3 || comment.text.length < 3) {
-          alert("Введите не менее 3 символов");
+          alert('Введите не менее 3 символов');
+        } else if (error.message === 'Server Error') {
+          alert('Сервер не отвечает, повторите позже.');
+        } else {
+          alert('Проверьте интернет соединение и повторите позднее.');
         }
+        
+        userName.value = userNameValue;
+        textComment.value = textCommentValue;
+        addForm.style.display = 'block';
+        loading.style.display = 'none';
       });
   };
 
