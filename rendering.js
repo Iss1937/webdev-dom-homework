@@ -14,7 +14,7 @@ export function renderComments() {
       if (comment.date) {
         dates = comment.date;
       } else {
-        const date = new Date();
+        const date = new Date(comment.dates);
         const day = ('0' + date.getDate()).slice(-2);
         const month = ('0' + (date.getMonth() + 1)).slice(-2);
         const year = date.getFullYear().toString().slice(-2);
